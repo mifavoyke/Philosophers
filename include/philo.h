@@ -1,0 +1,43 @@
+#ifndef PHILO_H
+# define PHILO_H
+
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <sys/time.h>
+# include <stdbool.h>
+
+typedef struct s_given {
+    unsigned int number_of_philosophers;
+    unsigned long time_to_die;
+    unsigned long time_to_eat;
+    unsigned long time_to_sleep;
+    unsigned int number_of_times_each_philosopher_must_eat;
+} t_given;
+
+typedef struct s_philo {
+    pthread_t philosopher;
+    unsigned int id;
+    pthread_mutex_t *right_fork;
+    pthread_mutex_t *left_fork;
+    unsigned long last_meal_time;
+    unsigned int number_of_meals_eaten;
+    t_given *given_params;
+} t_philo;
+
+
+typedef struct s_shared {
+    bool simulation_end;
+} t_shared;
+
+// MAIN
+void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params);
+
+void *ft_routine(void *arg);
+
+// UTILS
+void ft_cleanup(t_philo *philos, pthread_mutex_t *forks, int number_of_philosophers);
+
+#endif
