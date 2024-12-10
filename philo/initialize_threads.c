@@ -15,9 +15,12 @@ void ft_create_philosopher_threads(t_philo *philos, t_given *given_params)
 {
 	unsigned int i = 0;
 
+	pthread_create(&given_params->supervisor_thread, NULL, (void *)supervise, philos);
 	while (i < given_params->number_of_philosophers)
 	{
 		philos[i].id = i + 1;
+		philos[i].last_meal_time = 0;
+		philos[i].number_of_meals_eaten = 0;
 		philos[i].given_params = given_params;
 		pthread_create(&philos[i].philosopher, NULL, ft_routine, &philos[i]);
 		i++;
@@ -27,17 +30,22 @@ void ft_create_philosopher_threads(t_philo *philos, t_given *given_params)
 
 void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params)
 {
+	int *result;
+
 	*philos = (t_philo *)malloc(sizeof(t_philo) * given_params->number_of_philosophers);
 	if (!*philos)
 		return;
-	*forks = ft_initialize_forks(given_params->number_of_philosophers);
+	*forks = initialise_forks(given_params->number_of_philosophers);
 	if (!*forks)
 	{
 		free(*philos);
 		return;
 	}
-	ft_assign_forks(*philos, *forks, given_params->number_of_philosophers);
+	assign_forks(*philos, *forks, given_params->number_of_philosophers);
 	ft_create_philosopher_threads(*philos, given_params);
 	///
+	pthread_join(given_params->supervisor_thread, (void **)&result);
+	if (!result)
+		return;
 	ft_join_philosopher_threads(*philos, given_params->number_of_philosophers);
 }

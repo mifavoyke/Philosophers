@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 		printf("Invalid input.\n");
 		return (0);
 	}
-	ft_define_params(&given_params, argc, argv);
+	initialise_params(&given_params, argc, argv);
 	ft_create_philo(&philos, &forks, &given_params);
 	ft_cleanup(philos, forks);
 	return (0);
