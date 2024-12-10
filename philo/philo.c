@@ -13,6 +13,6 @@ int main(int argc, char *argv[])
 	}
 	ft_define_params(&given_params, argc, argv);
 	ft_create_philo(&philos, &forks, &given_params);
-	ft_cleanup(philos, forks, given_params.number_of_philosophers);
+	ft_cleanup(philos, forks);
 	return (0);
 }

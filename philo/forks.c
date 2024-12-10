@@ -1,6 +1,6 @@
 #include "../include/philo.h"
 
-pthread_mutex_t *ft_initialize_forks(int number_of_philosophers)
+pthread_mutex_t *ft_initialize_forks(unsigned int number_of_philosophers)
 {
 	pthread_mutex_t *forks;
 	unsigned int i = 0;
@@ -16,7 +16,7 @@ pthread_mutex_t *ft_initialize_forks(int number_of_philosophers)
 	return (forks);
 }
 
-void ft_assign_forks(t_philo *philos, pthread_mutex_t *forks, int number_of_philosophers)
+void ft_assign_forks(t_philo *philos, pthread_mutex_t *forks, unsigned int number_of_philosophers)
 {
 	unsigned int i = 0;
 
@@ -24,7 +24,7 @@ void ft_assign_forks(t_philo *philos, pthread_mutex_t *forks, int number_of_phil
 	{
 		philos[i].left_fork = &forks[i];
 		philos[i].right_fork = &forks[(i + 1) % number_of_philosophers];
-		printf("Philosopher has left fork %d and right fork %d.\n", i, (i + 1) % number_of_philosophers);
+		printf("Philosopher %d has left fork %d and right fork %d.\n", i, i, (i + 1) % number_of_philosophers);
 		i++;
 	}
 }

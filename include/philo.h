@@ -16,6 +16,7 @@ typedef struct s_given
 	unsigned long time_to_eat;
 	unsigned long time_to_sleep;
 	unsigned int number_of_times_each_philosopher_must_eat;
+	pthread_mutex_t print_mutex;
 	pthread_t supervisor;
 } t_given;
 
@@ -39,11 +40,23 @@ typedef struct s_shared
 void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params);
 
 void *ft_routine(void *arg);
-pthread_mutex_t *ft_initialize_forks(int number_of_philosophers);
-void ft_assign_forks(t_philo *philos, pthread_mutex_t *forks, int number_of_philosophers);
+pthread_mutex_t *ft_initialize_forks(unsigned int number_of_philosophers);
+void ft_assign_forks(t_philo *philos, pthread_mutex_t *forks, unsigned int number_of_philosophers);
 
 // UTILS
 void ft_define_params(t_given *given_params, int argc, char *argv[]);
-void ft_cleanup(t_philo *philos, pthread_mutex_t *forks, int number_of_philosophers);
+void ft_cleanup(t_philo *philos, pthread_mutex_t *forks);
+long long gettime();
+
+/*
+
+pthread_mutex_lock(philo->right_fork);
+if (pthread_mutex_trylock(philo->left_fork) != 0)
+{
+	pthread_mutex_unlock(philo->right_fork);  // Release right fork if left not available
+	return;
+}
+
+*/
 
 #endif

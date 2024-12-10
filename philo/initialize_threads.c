@@ -1,6 +1,6 @@
 #include "../include/philo.h"
 
-void ft_join_philosopher_threads(t_philo *philos, int number_of_philosophers)
+void ft_join_philosopher_threads(t_philo *philos, unsigned int number_of_philosophers)
 {
 	unsigned int i = 0;
 
@@ -17,11 +17,12 @@ void ft_create_philosopher_threads(t_philo *philos, t_given *given_params)
 
 	while (i < given_params->number_of_philosophers)
 	{
-		philos[i].id = i;
+		philos[i].id = i + 1;
 		philos[i].given_params = given_params;
 		pthread_create(&philos[i].philosopher, NULL, ft_routine, &philos[i]);
 		i++;
 	}
+	//
 }
 
 void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params)
@@ -37,5 +38,6 @@ void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_p
 	}
 	ft_assign_forks(*philos, *forks, given_params->number_of_philosophers);
 	ft_create_philosopher_threads(*philos, given_params);
+	///
 	ft_join_philosopher_threads(*philos, given_params->number_of_philosophers);
 }
