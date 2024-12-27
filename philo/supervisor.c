@@ -1,29 +1,33 @@
 #include "../include/philo.h"
 
-unsigned long update_death_note(t_philo *philo)
+void *supervise(void *arg)
 {
-	return (philo->last_meal_time + philo->given_params->time_to_die);
-}
-
-int *supervise(void *arg)
-{
-	t_philo **philos;
+	t_philo *philos;
 	unsigned long death_time;
-	int i = 0;
+	unsigned int i;
 
-	philos = (t_philo **)arg;
+	philos = (t_philo *)arg;
 
-	while (philos[i])
+	while (1)
 	{
-		death_time = update_death_note(philos[i]);
-		if (death_time == gettime())
+		i = 0;
+		while (i < philos[0].given_params->number_of_philosophers)
 		{
-			while (philos[i])
+			death_time = philos[i].last_meal_time + philos[i].given_params->time_to_die;
+			if (death_time <= gettime())
 			{
-				pthread_detach(philos[i]->philosopher);
-				i++;
+				printf("%ld %d died\n", gettime(), philos[i].id);
+				i = 0;
+				while (i < philos[0].given_params->number_of_philosophers)
+				{
+					pthread_detach(philos[i].philosopher);
+					i++;
+				}
+				return (NULL);
 			}
-			return (NULL);
+			i++;
 		}
+		usleep(10 * 1000);
 	}
+	return (NULL);
 }

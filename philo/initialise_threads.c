@@ -19,9 +19,9 @@ void ft_create_philosopher_threads(t_philo *philos, t_given *given_params)
 	while (i < given_params->number_of_philosophers)
 	{
 		philos[i].id = i + 1;
-		philos[i].last_meal_time = 0;
-		philos[i].number_of_meals_eaten = 0;
 		philos[i].given_params = given_params;
+		philos[i].number_of_meals_eaten = 0;
+		philos[i].last_meal_time = gettime();
 		pthread_create(&philos[i].philosopher, NULL, ft_routine, &philos[i]);
 		i++;
 	}
@@ -30,7 +30,7 @@ void ft_create_philosopher_threads(t_philo *philos, t_given *given_params)
 
 void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params)
 {
-	int *result;
+	void *result;
 
 	*philos = (t_philo *)malloc(sizeof(t_philo) * given_params->number_of_philosophers);
 	if (!*philos)
@@ -45,7 +45,6 @@ void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_p
 	ft_create_philosopher_threads(*philos, given_params);
 	///
 	pthread_join(given_params->supervisor_thread, (void **)&result);
-	if (!result)
-		return;
+
 	ft_join_philosopher_threads(*philos, given_params->number_of_philosophers);
 }

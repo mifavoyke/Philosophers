@@ -34,7 +34,7 @@ typedef struct s_philo
 // MAIN
 void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params);
 void *ft_routine(void *arg);
-int *supervise(void *arg);
+void *supervise(void *arg);
 pthread_mutex_t *initialise_forks(unsigned int number_of_philosophers);
 void assign_forks(t_philo *philos, pthread_mutex_t *forks, unsigned int number_of_philosophers);
 // UTILS

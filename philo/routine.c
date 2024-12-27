@@ -50,7 +50,7 @@ void *ft_routine(void *arg)
 		ft_eating(philo);
 
 		philo->last_meal_time = gettime();
-
+		
 		ft_sleeping(philo);
 		ft_thinking(philo);
 		i++;
