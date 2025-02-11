@@ -8,6 +8,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <stdbool.h>
+#include <limits.h>
 
 typedef struct s_given
 {
@@ -17,7 +18,8 @@ typedef struct s_given
 	unsigned long time_to_sleep;
 	unsigned int number_of_times_each_philosopher_must_eat;
 	pthread_mutex_t print_mutex;
-	pthread_t supervisor_thread;
+	pthread_mutex_t time_mutex;
+	pthread_t *supervisor_thread;
 } t_given;
 
 typedef struct s_philo
@@ -32,11 +34,12 @@ typedef struct s_philo
 } t_philo;
 
 // MAIN
-void ft_create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params);
-void *ft_routine(void *arg);
+void create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params);
+void *routine(void *arg);
 void *supervise(void *arg);
 pthread_mutex_t *initialise_forks(unsigned int number_of_philosophers);
 void assign_forks(t_philo *philos, pthread_mutex_t *forks, unsigned int number_of_philosophers);
+
 // UTILS
 void initialise_params(t_given *given_params, int argc, char *argv[]);
 void ft_cleanup(t_philo *philos, pthread_mutex_t *forks);

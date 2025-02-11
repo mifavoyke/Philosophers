@@ -1,26 +1,31 @@
-NAME = philo
-DIR_SRC = ./philo
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-RM = rm -rf
+NAME := philo
+DIR_SRC := ./philo
+DIR_BIN := ./bin
+CC := gcc
+CFLAGS := -Wall -Wextra -Werror -g
+RM := rm -f
 
-SRC = $(DIR_SRC)/philo.c
+SRC :=  $(DIR_SRC)/forks.c \
+        $(DIR_SRC)/initialise_threads.c \
+        $(DIR_SRC)/supervisor.c \
+        $(DIR_SRC)/ft_atoi.c \
+        $(DIR_SRC)/philo.c \
+        $(DIR_SRC)/routine.c \
+        $(DIR_SRC)/utils.c
 
-OBJ = $(SRC:.c=.o)
+OBJS := $(SRC:.c=.o)
 
-all: $(NAME)
+all: $(DIR_BIN)/$(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-
-$(DIR_SRC)/%.o: $(DIR_SRC)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(DIR_BIN)/$(NAME): $(OBJS)
+	mkdir -p $(DIR_BIN)
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	$(RM) $(OBJ)
+	$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) -r $(DIR_BIN)
 
 re: fclean all
 
