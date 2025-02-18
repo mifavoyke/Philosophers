@@ -1,10 +1,22 @@
 #include "../include/philo.h"
 
+int check_end(t_philo *philos)
+{
+	pthread_mutex_lock(&philos[0].given_params->end_mutex);
+	if (philos[0].given_params->end_flag == 1)
+	{
+		pthread_mutex_unlock(&philos[0].given_params->end_mutex);
+		return(1);
+	}
+	pthread_mutex_unlock(&philos[0].given_params->end_mutex);
+	return(0);
+}
+
 void ft_sleeping(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->given_params->print_mutex);
 	pthread_mutex_lock(&philo->given_params->time_mutex);
-	printf("%ld %d is sleeping\n", gettime(), philo->id);
+	printf("\033[38;5;226m%ld %d is sleeping\033[0m\n", gettime(), philo->id);
 	pthread_mutex_unlock(&philo->given_params->print_mutex);
 	pthread_mutex_unlock(&philo->given_params->time_mutex);
 	if (usleep(philo->given_params->time_to_sleep * 1000))
@@ -15,7 +27,7 @@ void ft_thinking(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->given_params->print_mutex);
 	pthread_mutex_lock(&philo->given_params->time_mutex);
-	printf("%ld %d is thinking\n", gettime(), philo->id);
+	printf("\033[38;5;45m%ld %d is thinking\033[0m\n", gettime(), philo->id);
 	pthread_mutex_unlock(&philo->given_params->print_mutex);
 	pthread_mutex_unlock(&philo->given_params->time_mutex);
 	if (usleep(1000))
@@ -36,7 +48,7 @@ void ft_eating(t_philo *philo)
 	}
 	pthread_mutex_lock(&philo->given_params->print_mutex);
 	pthread_mutex_lock(&philo->given_params->time_mutex);
-	printf("%ld %d is eating\n", gettime(), philo->id);
+	printf("\033[38;5;93m%ld %d is eating\033[0m\n", gettime(), philo->id);
 	pthread_mutex_unlock(&philo->given_params->print_mutex);
 	pthread_mutex_unlock(&philo->given_params->time_mutex);
 
@@ -62,6 +74,8 @@ void *routine(void *arg)
 		ft_eating(philo);
 		ft_sleeping(philo);
 		ft_thinking(philo);
+		if (check_end(philo) > 0)
+			return(NULL);
 		i++;
 	}
 	return (NULL);

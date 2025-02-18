@@ -1,6 +1,6 @@
 #include "../include/philo.h"
 
-void initialise_params(t_given *given_params, int argc, char *argv[])
+int initialise_params(t_given *given_params, int argc, char *argv[])
 {
 	given_params->number_of_philosophers = atoi(argv[1]);
 	given_params->time_to_die = atoi(argv[2]);
@@ -12,10 +12,13 @@ void initialise_params(t_given *given_params, int argc, char *argv[])
 		given_params->number_of_times_each_philosopher_must_eat = INT_MAX;
 	pthread_mutex_init(&given_params->print_mutex, NULL);
 	pthread_mutex_init(&given_params->time_mutex, NULL);
+	pthread_mutex_init(&given_params->end_mutex, NULL);
+	given_params->end_flag = 0;
 	printf("number of arguments: %d\n", argc);
 	printf("number of times a philo must eat: %d\n", given_params->number_of_times_each_philosopher_must_eat);
 	printf("Time to eat: %ld ms\n", given_params->time_to_eat * 1000);
 	printf("Time to sleep: %ld ms\n", given_params->time_to_sleep * 1000);
+	return(0);
 }
 
 int main(int argc, char *argv[])
@@ -26,10 +29,11 @@ int main(int argc, char *argv[])
 
 	if (argc < 2)
 	{
-		printf("Invalid input.\n");
+		printf("Invalid input.\nExpected:\nnumber_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n");
 		return (0);
 	}
-	initialise_params(&given_params, argc, argv);
+	if (initialise_params(&given_params, argc, argv))
+		return(1);
 	create_philo(&philos, &forks, &given_params);
 	ft_cleanup(philos, forks);
 	return (0);

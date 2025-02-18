@@ -11,6 +11,7 @@ void ft_cleanup(t_philo *philos, pthread_mutex_t *forks)
 	}
 	pthread_mutex_destroy(&philos->given_params->print_mutex);
 	pthread_mutex_destroy(&philos->given_params->time_mutex);
+	pthread_mutex_destroy(&philos->given_params->end_mutex);
 	free(philos);
 	free(forks);
 }

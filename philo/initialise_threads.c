@@ -3,21 +3,20 @@
 void join_philosopher_threads(t_philo *philos, unsigned int number_of_philosophers)
 {
 	unsigned int i = 0;
-	void *result;
 
 	while (i < number_of_philosophers)
 	{
 		pthread_join(philos[i].philosopher, NULL);
 		i++;
 	}
-	pthread_join(*philos[i].given_params->supervisor_thread, (void **)&result);
+	// pthread_join(*philos[i].given_params->supervisor_thread, NULL);
 }
 
 void create_philosopher_threads(t_philo *philos, t_given *given_params)
 {
 	unsigned int i = 0;
+	int err;
 
-	pthread_create(given_params->supervisor_thread, NULL, (void *)supervise, &philos[i]);
 	while (i < given_params->number_of_philosophers)
 	{
 		philos[i].id = i + 1;
@@ -26,9 +25,14 @@ void create_philosopher_threads(t_philo *philos, t_given *given_params)
 		pthread_mutex_lock(&philos[i].given_params->time_mutex);
 		philos[i].last_meal_time = gettime();
 		pthread_mutex_unlock(&philos[i].given_params->time_mutex);
-		pthread_create(&philos[i].philosopher, NULL, routine, &philos[i]);
+		err = pthread_create(&philos[i].philosopher, NULL, (void *)routine, &philos[i]);
+		if (err)
+			fprintf(stderr, "pthread_create failed: %s\n", strerror(err));
 		i++;
 	}
+	err = pthread_create(&given_params->supervisor_thread, NULL, (void *)supervise, &philos[0]);
+	if (err)
+		fprintf(stderr, "pthread_create failed: %s\n", strerror(err));
 }
 
 void create_philo(t_philo **philos, pthread_mutex_t **forks, t_given *given_params)
