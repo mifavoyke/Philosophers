@@ -15,9 +15,10 @@ int initialise_params(t_given *given_params, int argc, char *argv[])
 	pthread_mutex_init(&given_params->end_mutex, NULL);
 	given_params->end_flag = 0;
 	printf("number of arguments: %d\n", argc);
+	printf("Time to die: %ld ms\n", given_params->time_to_die);
+	printf("Time to eat: %ld ms\n", given_params->time_to_eat);
+	printf("Time to sleep: %ld ms\n", given_params->time_to_sleep);
 	printf("number of times a philo must eat: %d\n", given_params->number_of_times_each_philosopher_must_eat);
-	printf("Time to eat: %ld ms\n", given_params->time_to_eat * 1000);
-	printf("Time to sleep: %ld ms\n", given_params->time_to_sleep * 1000);
 	return(0);
 }
 

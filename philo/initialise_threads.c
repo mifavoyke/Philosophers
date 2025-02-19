@@ -21,7 +21,6 @@ void create_philosopher_threads(t_philo *philos, t_given *given_params)
 	{
 		philos[i].id = i + 1;
 		philos[i].given_params = given_params;
-		philos[i].number_of_meals_eaten = 0;
 		pthread_mutex_lock(&philos[i].given_params->time_mutex);
 		philos[i].last_meal_time = gettime();
 		pthread_mutex_unlock(&philos[i].given_params->time_mutex);

@@ -28,7 +28,9 @@ int monitor(t_philo *philos, unsigned int philo_count, unsigned long max_lifetim
 		pthread_mutex_lock(&philos[i].given_params->time_mutex);
 		current_time = gettime();
 		pthread_mutex_unlock(&philos[i].given_params->time_mutex);
-		if (death_time <= current_time)
+		// printf("death time: %ld for %d\n", death_time, philos[i].id);
+		// printf("current time: %ld\n", current_time);
+		if (current_time >= death_time)
 		{
 			kill_threads(philos);
 			printf("\033[38;5;208m%ld %d died\033[0m\n", current_time, philos[i].id);
@@ -53,7 +55,7 @@ void *supervise(void *arg)
 	while (1)
 	{
 		if (monitor(philos, philo_count, max_lifetime) > 0)
-			return(NULL);
+			return (NULL);
 	}
 	return (NULL);
 }

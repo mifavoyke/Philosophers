@@ -36,6 +36,12 @@ void ft_thinking(t_philo *philo)
 
 void ft_eating(t_philo *philo)
 {
+	unsigned long current_time;
+
+	pthread_mutex_lock(&philo->given_params->time_mutex);
+	philo->last_meal_time = gettime();
+	pthread_mutex_unlock(&philo->given_params->time_mutex);
+
 	if (philo->id < philo->given_params->number_of_philosophers - 1)
 	{
 		pthread_mutex_lock(philo->left_fork);
@@ -48,19 +54,22 @@ void ft_eating(t_philo *philo)
 	}
 	pthread_mutex_lock(&philo->given_params->print_mutex);
 	pthread_mutex_lock(&philo->given_params->time_mutex);
-	printf("\033[38;5;93m%ld %d is eating\033[0m\n", gettime(), philo->id);
+	current_time = gettime();
+	printf("\033[38;5;93m%ld %d is eating\033[0m\n", current_time, philo->id);
+	philo->last_meal_time = current_time + philo->given_params->time_to_eat;
+	// printf("new last meal time: %ld for %d\n", philo->last_meal_time, philo->id);
 	pthread_mutex_unlock(&philo->given_params->print_mutex);
 	pthread_mutex_unlock(&philo->given_params->time_mutex);
-
+	
 	if (usleep(philo->given_params->time_to_eat * 1000))
 		perror("usleep");
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 
-	pthread_mutex_lock(&philo->given_params->time_mutex);
-	philo->last_meal_time = gettime();
-	pthread_mutex_unlock(&philo->given_params->time_mutex);
-	philo->number_of_meals_eaten++;
+	// pthread_mutex_lock(&philo->given_params->time_mutex);
+	// philo->last_meal_time = gettime();
+	// printf("new last meal time: %ld for %d\n", philo->last_meal_time, philo->id);
+	// pthread_mutex_unlock(&philo->given_params->time_mutex);
 }
 
 void *routine(void *arg)
@@ -71,8 +80,14 @@ void *routine(void *arg)
 	philo = (t_philo *)arg;
 	while (i < philo->given_params->number_of_times_each_philosopher_must_eat)
 	{
+		// if (check_end(philo) > 0)
+		// 	return(NULL);
 		ft_eating(philo);
+		// if (check_end(philo) > 0)
+		// 	return(NULL);
 		ft_sleeping(philo);
+		// if (check_end(philo) > 0)
+		// 	return(NULL);
 		ft_thinking(philo);
 		if (check_end(philo) > 0)
 			return(NULL);
