@@ -1,24 +1,22 @@
 #include "../include/philo.h"
 
-int check_end(t_philo *philos)
+int check_end(t_philo *philo)
 {
-	pthread_mutex_lock(&philos[0].given_params->end_mutex);
-	if (philos[0].given_params->end_flag == 1)
+	pthread_mutex_lock(&philo[0].given_params->end_mutex);
+	if (philo[0].given_params->end_flag == 1)
 	{
-		pthread_mutex_unlock(&philos[0].given_params->end_mutex);
-		return(1);
+		pthread_mutex_unlock(&philo[0].given_params->end_mutex);
+		return (1);
 	}
-	pthread_mutex_unlock(&philos[0].given_params->end_mutex);
-	return(0);
+	pthread_mutex_unlock(&philo[0].given_params->end_mutex);
+	return (0);
 }
 
 void ft_sleeping(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->given_params->print_mutex);
-	pthread_mutex_lock(&philo->given_params->time_mutex);
-	printf("\033[38;5;226m%ld %d is sleeping\033[0m\n", gettime(), philo->id);
+	printf("\033[38;5;226m%ld %d is sleeping\033[0m\n", format_time(philo[0].given_params->start_time), philo->id);
 	pthread_mutex_unlock(&philo->given_params->print_mutex);
-	pthread_mutex_unlock(&philo->given_params->time_mutex);
 	if (usleep(philo->given_params->time_to_sleep * 1000))
 		perror("usleep");
 }
@@ -26,20 +24,21 @@ void ft_sleeping(t_philo *philo)
 void ft_thinking(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->given_params->print_mutex);
-	pthread_mutex_lock(&philo->given_params->time_mutex);
-	printf("\033[38;5;45m%ld %d is thinking\033[0m\n", gettime(), philo->id);
+	printf("\033[38;5;45m%ld %d is thinking\033[0m\n", format_time(philo[0].given_params->start_time), philo->id);
 	pthread_mutex_unlock(&philo->given_params->print_mutex);
-	pthread_mutex_unlock(&philo->given_params->time_mutex);
 	if (usleep(1000))
 		perror("usleep");
 }
 
-void ft_eating(t_philo *philo)
-{
-	unsigned long current_time;
+// void take_fork(t_philo *philo)
+// {
 
+// }
+
+int ft_eating(t_philo *philo)
+{
 	pthread_mutex_lock(&philo->given_params->time_mutex);
-	philo->last_meal_time = gettime();
+	philo->last_meal_time = format_time(philo[0].given_params->start_time);
 	pthread_mutex_unlock(&philo->given_params->time_mutex);
 
 	if (philo->id < philo->given_params->number_of_philosophers - 1)
@@ -52,46 +51,68 @@ void ft_eating(t_philo *philo)
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->left_fork);
 	}
+
+	if (check_end(philo))
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+		return (1);
+	}
+
 	pthread_mutex_lock(&philo->given_params->print_mutex);
-	pthread_mutex_lock(&philo->given_params->time_mutex);
-	current_time = gettime();
-	printf("\033[38;5;93m%ld %d is eating\033[0m\n", current_time, philo->id);
-	philo->last_meal_time = current_time + philo->given_params->time_to_eat;
-	// printf("new last meal time: %ld for %d\n", philo->last_meal_time, philo->id);
+	printf("%ld %d has taken a fork\n", format_time(philo[0].given_params->start_time), philo->id);
 	pthread_mutex_unlock(&philo->given_params->print_mutex);
+
+	if (check_end(philo))
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+		return (1);
+	}
+
+	pthread_mutex_lock(&philo->given_params->print_mutex);
+	printf("\033[38;5;93m%ld %d is eating\033[0m\n", format_time(philo[0].given_params->start_time), philo->id);
+	pthread_mutex_unlock(&philo->given_params->print_mutex);
+
+	pthread_mutex_lock(&philo->given_params->time_mutex);
+	philo->last_meal_time = format_time(philo[0].given_params->start_time) + philo->given_params->time_to_eat;
 	pthread_mutex_unlock(&philo->given_params->time_mutex);
-	
+
 	if (usleep(philo->given_params->time_to_eat * 1000))
 		perror("usleep");
+
+	pthread_mutex_lock(&philo->given_params->eating_mutex);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->given_params->eating_mutex);
+	
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
-
-	// pthread_mutex_lock(&philo->given_params->time_mutex);
-	// philo->last_meal_time = gettime();
-	// printf("new last meal time: %ld for %d\n", philo->last_meal_time, philo->id);
-	// pthread_mutex_unlock(&philo->given_params->time_mutex);
+	
+	pthread_mutex_lock(&philo->given_params->time_mutex);
+	philo->last_meal_time = format_time(philo[0].given_params->start_time);
+	pthread_mutex_unlock(&philo->given_params->time_mutex);
+	return (0);
 }
 
 void *routine(void *arg)
 {
 	t_philo *philo;
-	unsigned int i = 0;
 
 	philo = (t_philo *)arg;
-	while (i < philo->given_params->number_of_times_each_philosopher_must_eat)
+	while (1)
 	{
-		// if (check_end(philo) > 0)
-		// 	return(NULL);
-		ft_eating(philo);
-		// if (check_end(philo) > 0)
-		// 	return(NULL);
+		if (check_end(philo))
+			return (NULL);
+		if (ft_eating(philo))
+			return (NULL);
+		if (check_end(philo))
+			return (NULL);
 		ft_sleeping(philo);
-		// if (check_end(philo) > 0)
-		// 	return(NULL);
+		if (check_end(philo))
+			return (NULL);
 		ft_thinking(philo);
-		if (check_end(philo) > 0)
-			return(NULL);
-		i++;
+		if (check_end(philo))
+			return (NULL);
 	}
 	return (NULL);
 }

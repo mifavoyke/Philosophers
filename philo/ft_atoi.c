@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhusieva <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 18:18:59 by yhusieva          #+#    #+#             */
-/*   Updated: 2023/06/28 18:19:01 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/23 15:56:46 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	ft_atoi(const char *nptr)
 {
-	int	i;
-	int	s;
-	int	j;
+	int			i;
+	int			s;
+	long int	j;
 
 	i = 0;
 	s = 1;
@@ -31,8 +31,15 @@ int	ft_atoi(const char *nptr)
 	}
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
-		j = (nptr[i] - '0') + (j * 10);
+		if ((j > INT_MAX / 10) || (j == INT_MAX / 10 && (nptr[i] - '0') > INT_MAX % 10))
+		{
+			if (s == 1)
+				return (0);
+			else
+				return (-1);
+		}
+		j = (j * 10) + (nptr[i] - '0');
 		i++;
 	}
-	return (j * s);
+	return ((int)j * s);
 }
