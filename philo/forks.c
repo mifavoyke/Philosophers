@@ -1,11 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   forks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yhusieva <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/23 20:18:00 by yhusieva          #+#    #+#             */
+/*   Updated: 2025/02/23 20:18:01 by yhusieva         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
-pthread_mutex_t *initialise_forks(int number_of_philosophers)
+pthread_mutex_t	*initialise_forks(int number_of_philosophers)
 {
-	pthread_mutex_t *forks;
-	int i = 0;
+	pthread_mutex_t	*forks;
+	int				i;
+	size_t			size;
 
-	forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * number_of_philosophers);
+	i = 0;
+	size = sizeof(pthread_mutex_t) * number_of_philosophers;
+	forks = (pthread_mutex_t *)malloc(size);
 	if (!forks)
 		return (NULL);
 	while (i < number_of_philosophers)
@@ -16,10 +31,12 @@ pthread_mutex_t *initialise_forks(int number_of_philosophers)
 	return (forks);
 }
 
-void assign_forks(t_philo *philos, pthread_mutex_t *forks, int number_of_philosophers)
+void	assign_forks(t_philo *philos, pthread_mutex_t *forks,
+			int number_of_philosophers)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (i < number_of_philosophers)
 	{
 		philos[i].left_fork = &forks[i];

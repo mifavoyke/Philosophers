@@ -6,12 +6,14 @@ CFLAGS := -Wall -Wextra -Werror -g
 RM := rm -f
 
 SRC :=  $(DIR_SRC)/forks.c \
-        $(DIR_SRC)/initialise_threads.c \
+        $(DIR_SRC)/threads.c \
         $(DIR_SRC)/supervisor.c \
         $(DIR_SRC)/ft_atoi.c \
         $(DIR_SRC)/philo.c \
         $(DIR_SRC)/routine.c \
-        $(DIR_SRC)/utils.c
+        $(DIR_SRC)/utils.c \
+        $(DIR_SRC)/given.c \
+        $(DIR_SRC)/eating.c
 
 OBJS := $(SRC:.c=.o)
 
