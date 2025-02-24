@@ -6,7 +6,7 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:28:52 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/24 16:27:54 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:47:20 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,27 @@ static void	init_mutexes(t_given *given_params)
 	pthread_mutex_init(&given_params->end_mutex, NULL);
 }
 
+static int	run_checks(t_given *given_params)
+{
+	if (given_params->number_of_philosophers <= 0)
+	{
+		printf("Imagine negative or zero units of people.\n");
+		return (1);
+	}
+	else if (given_params->number_of_philosophers == 1)
+	{
+		printf("\033[38;5;208m0 1 died\033[0m\n");
+		return (1);
+	}
+	if (given_params->time_to_die <= 0 || given_params->time_to_eat <= 0
+		|| given_params->time_to_sleep <= 0 || given_params->meal_goal <= 0)
+	{
+		printf("Good luck with the time travel to the past.\n");
+		return (1);
+	}
+	return (0);
+}
+
 int	initialise_params(t_given *given_params, int argc, char *argv[])
 {
 	given_params->number_of_philosophers = ft_atoi(argv[1]);
@@ -47,17 +68,8 @@ int	initialise_params(t_given *given_params, int argc, char *argv[])
 		given_params->meal_goal = ft_atoi(argv[5]);
 	else
 		given_params->meal_goal = INT_MAX;
-	if (given_params->number_of_philosophers <= 0)
-	{
-		printf("Imagine negative (zero) units of people.\n");
+	if (run_checks(given_params))
 		return (1);
-	}
-	if (given_params->time_to_die <= 0 || given_params->time_to_eat <= 0
-		|| given_params->time_to_sleep <= 0 || given_params->meal_goal <= 0)
-	{
-		printf("Good luck with the time travel to the past.\n");
-		return (1);
-	}
 	given_params->end_flag = 0;
 	given_params->start_time = gettime();
 	init_mutexes(given_params);
