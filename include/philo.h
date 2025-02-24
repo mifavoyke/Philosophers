@@ -6,7 +6,7 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:10:03 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/23 20:54:45 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:52:31 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,6 @@ long			format_time(long start_time);
 void			print_log(t_philo *philos, char *msg, char *colour);
 int				ft_atoi(const char *nptr);
 int				is_number(const char *str);
+int				validate_input(int argc, char *argv[]);
 
 #endif

@@ -1,16 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   given.c                                            :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:28:52 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/23 20:42:52 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:27:54 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+int	validate_input(int argc, char *argv[])
+{
+	int	i;
+
+	i = 1;
+	while (i < argc)
+	{
+		if (!is_number(argv[i]))
+		{
+			printf("Numeric values are expected.\n");
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
 
 static void	init_mutexes(t_given *given_params)
 {

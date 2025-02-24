@@ -6,28 +6,11 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:24:31 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/23 20:59:39 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:52:44 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-int validate_input(int argc, char *argv[])
-{
-	int	i;
-
-	i = 1;
-	while (i < argc)
-	{
-		if (!is_number(argv[i]))
-		{
-			printf("Numeric values are expected.\n");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
 
 int	main(int argc, char *argv[])
 {

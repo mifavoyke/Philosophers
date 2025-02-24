@@ -12,7 +12,7 @@ SRC :=  $(DIR_SRC)/forks.c \
         $(DIR_SRC)/philo.c \
         $(DIR_SRC)/routine.c \
         $(DIR_SRC)/utils.c \
-        $(DIR_SRC)/given.c \
+        $(DIR_SRC)/parsing.c \
         $(DIR_SRC)/eating.c
 
 OBJS := $(SRC:.c=.o)

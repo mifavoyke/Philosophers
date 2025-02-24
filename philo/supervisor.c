@@ -6,7 +6,7 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:26:56 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/23 20:27:43 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/24 16:22:44 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static int	check_for_death(t_philo *philos, int i, long max_lifetime)
 	current_time = format_time(philos[i].given_params->start_time);
 	if (current_time >= death_time)
 	{
+		print_log(&philos[i], "died", "\033[38;5;208m");
 		mark_flag(philos);
-		print_log(philos, "died", "\033[38;5;208m");
 		return (1);
 	}
 	return (0);
