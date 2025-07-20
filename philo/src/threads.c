@@ -6,7 +6,7 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:32:52 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/23 20:34:59 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:15:26 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,20 @@ static void	create_philosopher_threads(t_philo *philos, t_given *given_params)
 		printf("pthread_create\n");
 }
 
-void	create_philo(t_philo **philos, pthread_mutex_t **forks,
+int	create_philo(t_philo **philos, pthread_mutex_t **forks,
 			t_given *given_params)
 {
 	size_t	size;
 
 	size = sizeof(t_philo) * given_params->number_of_philosophers;
-	*philos = (t_philo *)malloc(size);
+	*philos = malloc(size);
 	if (!*philos)
-		return ;
+		return (1);
 	*forks = initialise_forks(given_params->number_of_philosophers);
 	if (!*forks)
-		return ;
+		return (1);
 	assign_forks(*philos, *forks, given_params->number_of_philosophers);
 	create_philosopher_threads(*philos, given_params);
 	join_philosopher_threads(*philos, given_params->number_of_philosophers);
+	return (0);
 }

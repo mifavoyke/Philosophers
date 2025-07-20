@@ -6,7 +6,7 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:10:03 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/24 15:52:31 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:14:48 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_philo
 }	t_philo;
 
 // MAIN
-void			create_philo(t_philo **philos, pthread_mutex_t **forks,
+int				create_philo(t_philo **philos, pthread_mutex_t **forks,
 					t_given *given_params);
 int				ft_eating(t_philo *philo);
 void			*routine(void *arg);

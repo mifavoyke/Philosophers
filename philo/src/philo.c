@@ -6,7 +6,7 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:24:31 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/24 15:52:44 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:14:57 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	main(int argc, char *argv[])
 		return (1);
 	if (initialise_params(&given_params, argc, argv))
 		return (1);
-	create_philo(&philos, &forks, &given_params);
+	if (create_philo(&philos, &forks, &given_params))
+		return (1);
 	cleanup(philos, forks);
 	return (0);
 }

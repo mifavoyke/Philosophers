@@ -6,7 +6,7 @@
 /*   By: yhusieva <yhusieva@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 20:26:56 by yhusieva          #+#    #+#             */
-/*   Updated: 2025/02/24 16:22:44 by yhusieva         ###   ########.fr       */
+/*   Updated: 2025/04/04 19:07:05 by yhusieva         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	monitor(t_philo *philos, int philo_count, long max_lifetime)
 	while (i < philo_count)
 	{
 		pthread_mutex_lock(&philos[i].given_params->eating_mutex);
-		if (philos[i].meals_eaten == philos[i].given_params->meal_goal)
+		if (philos[i].meals_eaten >= philos[i].given_params->meal_goal)
 			full_philos++;
 		pthread_mutex_unlock(&philos[i].given_params->eating_mutex);
 		if (check_for_death(philos, i, max_lifetime))

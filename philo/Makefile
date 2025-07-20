@@ -1,7 +1,7 @@
 NAME := philo
-DIR_SRC := ./philo
+DIR_SRC := ./src
 DIR_BIN := ./bin
-CC := gcc
+CC := cc
 CFLAGS := -Wall -Wextra -Werror -g
 RM := rm -f
 
